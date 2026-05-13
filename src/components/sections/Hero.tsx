@@ -3,13 +3,13 @@ import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
+const E = [0.16, 1, 0.3, 1] as const;
 
 const BLOBS = [
-  { x: 0.2, y: 0.3, r: 0.55, color: "rgba(70,20,160,0.45)", sx: 0.00028, sy: 0.00022, px: 0, py: 0.6 },
-  { x: 0.72, y: 0.2, r: 0.5, color: "rgba(20,30,140,0.4)", sx: 0.00022, sy: 0.0002, px: 1.4, py: 1.0 },
-  { x: 0.5, y: 0.75, r: 0.6, color: "rgba(40,15,120,0.35)", sx: 0.0002, sy: 0.00028, px: 2.6, py: 1.8 },
-  { x: 0.85, y: 0.6, r: 0.45, color: "rgba(15,40,100,0.3)", sx: 0.00032, sy: 0.00024, px: 3.9, py: 2.5 },
+  { x: 0.15, y: 0.2,  r: 0.7, color: "rgba(80,30,160,0.35)",  sx: 0.00024, sy: 0.00018, px: 0,   py: 0.7 },
+  { x: 0.82, y: 0.15, r: 0.6, color: "rgba(30,15,100,0.3)",   sx: 0.0002,  sy: 0.00022, px: 1.4, py: 1.1 },
+  { x: 0.5,  y: 0.78, r: 0.65,color: "rgba(50,20,120,0.28)",  sx: 0.00018, sy: 0.00028, px: 2.7, py: 1.9 },
+  { x: 0.78, y: 0.72, r: 0.55,color: "rgba(196,153,95,0.06)", sx: 0.00030, sy: 0.00020, px: 4.0, py: 2.6 },
 ];
 
 export function Hero() {
@@ -20,16 +20,13 @@ export function Hero() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    let animId: number;
-    let t = 0;
+    let id: number, t = 0;
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
+      canvas.width  = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
     resize();
-
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
@@ -37,10 +34,10 @@ export function Hero() {
       if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const b of BLOBS) {
-        const cx = (b.x + Math.sin(t * b.sx * 1000 + b.px) * 0.12) * canvas.width;
-        const cy = (b.y + Math.cos(t * b.sy * 1000 + b.py) * 0.12) * canvas.height;
-        const r = b.r * Math.max(canvas.width, canvas.height);
-        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        const cx = (b.x + Math.sin(t * b.sx * 1000 + b.px) * 0.14) * canvas.width;
+        const cy = (b.y + Math.cos(t * b.sy * 1000 + b.py) * 0.14) * canvas.height;
+        const r  = b.r * Math.max(canvas.width, canvas.height);
+        const g  = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
         g.addColorStop(0, b.color);
         g.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = g;
@@ -49,30 +46,36 @@ export function Hero() {
         ctx.fill();
       }
       t += 16;
-      animId = requestAnimationFrame(draw);
+      id = requestAnimationFrame(draw);
     }
-
-    animId = requestAnimationFrame(draw);
-    return () => {
-      cancelAnimationFrame(animId);
-      ro.disconnect();
-    };
+    id = requestAnimationFrame(draw);
+    return () => { cancelAnimationFrame(id); ro.disconnect(); };
   }, []);
 
   return (
-    <section className="relative flex min-h-svh flex-col justify-between overflow-hidden bg-bg">
-      {/* Aurora */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+    <section className="relative flex min-h-svh flex-col overflow-hidden bg-bg">
+      {/* Aurora canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
+
+      {/* CSS radial spotlight */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(196,153,95,0.07) 0%, transparent 70%)," +
+            "radial-gradient(ellipse 60% 50% at 0% 100%, rgba(80,30,160,0.12) 0%, transparent 60%)",
+        }}
         aria-hidden
       />
-      {/* Grain */}
+
+      {/* Fine grid overlay */}
       <div
-        className="absolute inset-0 opacity-[0.025] mix-blend-overlay pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")",
+            "linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)," +
+            "linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
         }}
         aria-hidden
       />
@@ -80,87 +83,148 @@ export function Hero() {
       {/* Nav */}
       <Container className="relative z-10">
         <motion.nav
-          className="flex items-center justify-between pt-8"
-          initial={{ opacity: 0, y: -10 }}
+          className="flex items-center justify-between pt-8 pb-0"
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: EASE }}
+          transition={{ duration: 0.8, ease: E }}
         >
-          <span className="font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase">
-            jorge · nava
+          <span className="font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase">
+            Jorge Nava
           </span>
-          <span className="font-mono text-[11px] tracking-[0.2em] text-fg-muted">
-            2026
-          </span>
+          <div className="flex items-center gap-6">
+            <a
+              href="https://github.com/JorgeNava"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[10px] tracking-[0.2em] text-fg-muted uppercase hover:text-gold transition-colors duration-300"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://one-spark.com.mx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[10px] tracking-[0.2em] text-fg-muted uppercase hover:text-gold transition-colors duration-300"
+            >
+              One Spark
+            </a>
+          </div>
         </motion.nav>
       </Container>
 
-      {/* Main */}
-      <Container className="relative z-10">
-        <div className="flex flex-col gap-5">
-          <motion.p
-            className="font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.35, ease: EASE }}
-          >
-            Arquitecto de Software · CEO, One Spark
-          </motion.p>
+      {/* Hero content — centrado verticalmente */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center text-center px-6 py-20">
 
-          <div className="overflow-hidden">
-            <motion.h1
-              className="font-sans font-medium leading-[0.86] tracking-[-0.04em] text-fg"
-              style={{ fontSize: "clamp(68px, 13vw, 190px)" }}
-              initial={{ y: "115%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.1, delay: 0.08, ease: EASE }}
-            >
-              Jorge
-            </motion.h1>
-          </div>
-
-          <div className="overflow-hidden">
-            <motion.h1
-              className="font-sans font-medium leading-[0.86] tracking-[-0.04em] text-fg"
-              style={{ fontSize: "clamp(68px, 13vw, 190px)" }}
-              initial={{ y: "115%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1.1, delay: 0.18, ease: EASE }}
-            >
-              Nava
-            </motion.h1>
-          </div>
-
-          <motion.p
-            className="mt-2 max-w-sm text-base text-fg-muted leading-relaxed"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.52, ease: EASE }}
-          >
-            Construyo productos digitales que escalan — desde la arquitectura
-            hasta el pixel.
-          </motion.p>
-        </div>
-      </Container>
-
-      {/* Scroll cue */}
-      <Container className="relative z-10 pb-10">
+        {/* Decorative ring */}
         <motion.div
-          className="flex items-center gap-3"
+          className="absolute rounded-full border border-gold-border pointer-events-none"
+          style={{ width: "min(520px, 90vw)", height: "min(520px, 90vw)" }}
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, delay: 0.3, ease: E }}
+          aria-hidden
+        />
+        <motion.div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: "min(520px, 90vw)", height: "min(520px, 90vw)",
+            background: "radial-gradient(circle, rgba(196,153,95,0.04) 0%, transparent 70%)",
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
+          transition={{ duration: 1.8, delay: 0.4 }}
+          aria-hidden
+        />
+
+        {/* Eyebrow */}
+        <motion.p
+          className="font-mono text-[10px] tracking-[0.3em] text-gold uppercase mb-10"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: E }}
         >
-          <motion.div
-            className="h-px w-8 bg-fg-muted origin-left"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.6, delay: 1.0, ease: EASE }}
-          />
-          <span className="font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase">
-            scroll
+          Arquitecto de Software · CEO, One Spark
+        </motion.p>
+
+        {/* Name — Cormorant Garamond, light, caps */}
+        <div className="overflow-hidden mb-1">
+          <motion.h1
+            className="font-display font-light tracking-[0.18em] text-fg uppercase leading-[0.9]"
+            style={{ fontSize: "clamp(56px, 11vw, 168px)" }}
+            initial={{ y: "105%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1.1, delay: 0.1, ease: E }}
+          >
+            Jorge
+          </motion.h1>
+        </div>
+        <div className="overflow-hidden">
+          <motion.h1
+            className="font-display font-light tracking-[0.18em] text-fg uppercase leading-[0.9]"
+            style={{ fontSize: "clamp(56px, 11vw, 168px)" }}
+            initial={{ y: "105%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1.1, delay: 0.22, ease: E }}
+          >
+            Nava
+          </motion.h1>
+        </div>
+
+        {/* Gold separator line */}
+        <motion.div
+          className="flex items-center gap-4 mt-10 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.55 }}
+        >
+          <span className="block h-px w-12 bg-gradient-to-r from-transparent to-gold/40" />
+          <span className="text-gold text-xs">✦</span>
+          <span className="block h-px w-12 bg-gradient-to-l from-transparent to-gold/40" />
+        </motion.div>
+
+        {/* Tagline */}
+        <motion.p
+          className="text-base text-fg-muted leading-relaxed max-w-xs"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.65, ease: E }}
+        >
+          Diseño y construyo productos digitales<br />
+          que escalan y perduran.
+        </motion.p>
+
+        {/* Bottom location row */}
+        <motion.div
+          className="flex items-center gap-8 mt-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
+        >
+          <span className="font-mono text-[10px] tracking-[0.2em] text-fg-muted uppercase">
+            Jalisco, México
+          </span>
+          <span className="block w-px h-3 bg-fg-subtle" />
+          <span className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase">
+            Disponible
           </span>
         </motion.div>
-      </Container>
+      </div>
+
+      {/* Scroll cue */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1.1 }}
+      >
+        <span className="font-mono text-[9px] tracking-[0.3em] text-fg-muted uppercase">scroll</span>
+        <motion.div
+          className="w-px h-10 bg-gradient-to-b from-gold/50 to-transparent origin-top"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 0.8, delay: 1.2, ease: E }}
+        />
+      </motion.div>
     </section>
   );
 }
