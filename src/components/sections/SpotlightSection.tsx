@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useMotionValue, useSpring, useMotionTemplate } from "motion/react";
 import { Container } from "@/components/ui/Container";
 
@@ -16,35 +16,48 @@ const WORDS = [
 
 export function SpotlightSection() {
   const ref = useRef<HTMLElement>(null);
+  const wordsRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
 
-  // Coordinates are relative to the words grid div, matching clip-path space
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  // Position tracks cursor with zero lag — raw motion values, no spring
+  const mouseX = useMotionValue(-9999);
+  const mouseY = useMotionValue(-9999);
+  // Radius springs only for smooth enter/leave animation
   const radius = useMotionValue(0);
   const springR = useSpring(radius, { stiffness: 280, damping: 35 });
   const clipPath = useMotionTemplate`circle(${springR}px at ${mouseX}px ${mouseY}px)`;
 
   const [entered, setEntered] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  };
+  useEffect(() => {
+    let inside = false;
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-    radius.set(200);
-    setEntered(true);
-  };
+    const onMove = (e: MouseEvent) => {
+      const el = wordsRef.current;
+      if (!el) return;
 
-  const handleMouseLeave = () => {
-    radius.set(0);
-    setEntered(false);
-  };
+      // Always recalculate from live bounding rect — handles scroll, resize, Lenis transforms
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const nowInside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+
+      if (nowInside) {
+        // Update position only while inside so the circle never teleports
+        mouseX.set(x);
+        mouseY.set(y);
+      }
+
+      if (nowInside !== inside) {
+        inside = nowInside;
+        radius.set(nowInside ? 200 : 0);
+        setEntered(nowInside);
+      }
+    };
+
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [mouseX, mouseY, radius]);
 
   return (
     <section ref={ref} className="py-40 bg-bg border-t border-border overflow-hidden relative select-none">
@@ -87,40 +100,43 @@ export function SpotlightSection() {
           {entered ? "Sigue explorando →" : "Mueve el cursor para explorar →"}
         </motion.p>
 
-        {/* Words grid — mouse events live HERE so coordinates match clip-path space */}
+        {/* Words grid — ref used by native window listener for reliable coordinate tracking */}
         <motion.div
-          className="relative cursor-crosshair"
+          className="relative"
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.3, ease: E }}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
         >
-          {/* Dim layer */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none">
-            {WORDS.map((w) => (
-              <span key={w} className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none">
-                {w}
-              </span>
-            ))}
-          </div>
+          {/* Attach ref to a plain div so getBoundingClientRect is always stable */}
+          <div ref={wordsRef} className="relative">
+            {/* Dim layer */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none">
+              {WORDS.map((w) => (
+                <span
+                  key={w}
+                  className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none"
+                >
+                  {w}
+                </span>
+              ))}
+            </div>
 
-          {/* Gold revealed layer — clip-path space matches parent div coordinates */}
-          <motion.div
-            className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none"
-            style={{ clipPath }}
-          >
-            {WORDS.map((w) => (
-              <span
-                key={w}
-                className="font-mono text-[10px] tracking-[0.18em] text-gold uppercase py-3.5 leading-none"
-                style={{ textShadow: "0 0 20px rgba(196,153,95,0.6), 0 0 40px rgba(196,153,95,0.25)" }}
-              >
-                {w}
-              </span>
-            ))}
-          </motion.div>
+            {/* Gold revealed layer — clip-path space is relative to this same div */}
+            <motion.div
+              className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none"
+              style={{ clipPath }}
+            >
+              {WORDS.map((w) => (
+                <span
+                  key={w}
+                  className="font-mono text-[10px] tracking-[0.18em] text-gold uppercase py-3.5 leading-none"
+                  style={{ textShadow: "0 0 20px rgba(196,153,95,0.6), 0 0 40px rgba(196,153,95,0.25)" }}
+                >
+                  {w}
+                </span>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
       </Container>
     </section>
