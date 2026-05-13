@@ -18,19 +18,28 @@ const WORDS = [
 export function SpotlightSection() {
   const ref = useRef<HTMLElement>(null);
   const wordsRef = useRef<HTMLDivElement>(null);
+  const mobileGridRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
   const isMobile = useIsMobile();
 
-  // Position tracks cursor with zero lag — raw motion values, no spring
+  // Desktop: cursor-based spotlight
   const mouseX = useMotionValue(-9999);
   const mouseY = useMotionValue(-9999);
-  // Radius springs only for smooth enter/leave animation
   const radius = useMotionValue(0);
   const springR = useSpring(radius, { stiffness: 280, damping: 35 });
   const clipPath = useMotionTemplate`circle(${springR}px at ${mouseX}px ${mouseY}px)`;
 
-  const [entered, setEntered] = useState(false);
+  // Mobile: touch-based spotlight
+  const touchX = useMotionValue(0);
+  const touchY = useMotionValue(0);
+  const touchRadius = useMotionValue(0);
+  const springTouchR = useSpring(touchRadius, { stiffness: 280, damping: 35 });
+  const touchClipPath = useMotionTemplate`circle(${springTouchR}px at ${touchX}px ${touchY}px)`;
 
+  const [entered, setEntered] = useState(false);
+  const [touching, setTouching] = useState(false);
+
+  // Desktop mousemove listener
   useEffect(() => {
     if (isMobile) return;
     let inside = false;
@@ -59,6 +68,30 @@ export function SpotlightSection() {
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
   }, [mouseX, mouseY, radius, isMobile]);
+
+  const updateTouchPos = (e: React.TouchEvent) => {
+    const el = mobileGridRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const touch = e.touches[0];
+    touchX.set(touch.clientX - rect.left);
+    touchY.set(touch.clientY - rect.top);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    updateTouchPos(e);
+    touchRadius.set(180);
+    setTouching(true);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    updateTouchPos(e);
+  };
+
+  const onTouchEnd = () => {
+    touchRadius.set(0);
+    setTouching(false);
+  };
 
   return (
     <section ref={ref} className="py-40 bg-bg border-t border-border overflow-hidden relative select-none">
@@ -98,7 +131,9 @@ export function SpotlightSection() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {isMobile ? "Stack tecnológico" : entered ? "Sigue explorando →" : "Mueve el cursor para explorar →"}
+          {isMobile
+            ? touching ? "Sigue explorando →" : "Dale clic para explorar →"
+            : entered ? "Sigue explorando →" : "Mueve el cursor para explorar →"}
         </motion.p>
 
         {/* Words grid */}
@@ -109,19 +144,44 @@ export function SpotlightSection() {
           transition={{ duration: 0.9, delay: 0.3, ease: E }}
         >
           {isMobile ? (
-            /* Mobile: all words visible in gold — no clip-path needed */
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-1">
-              {WORDS.map((w) => (
-                <span
-                  key={w}
-                  className="font-mono text-[10px] tracking-[0.18em] text-gold/65 uppercase py-3.5 leading-none"
-                >
-                  {w}
-                </span>
-              ))}
+            /* Mobile: touch-based spotlight (same clip-path mechanic as desktop) */
+            <div
+              ref={mobileGridRef}
+              className="relative"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
+              {/* Dim layer */}
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-1 pointer-events-none">
+                {WORDS.map((w) => (
+                  <span
+                    key={w}
+                    className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none"
+                  >
+                    {w}
+                  </span>
+                ))}
+              </div>
+
+              {/* Gold revealed layer — clip-path follows touch */}
+              <motion.div
+                className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 gap-x-4 gap-y-1 pointer-events-none"
+                style={{ clipPath: touchClipPath }}
+              >
+                {WORDS.map((w) => (
+                  <span
+                    key={w}
+                    className="font-mono text-[10px] tracking-[0.18em] text-gold uppercase py-3.5 leading-none"
+                    style={{ textShadow: "0 0 20px rgba(196,153,95,0.6), 0 0 40px rgba(196,153,95,0.25)" }}
+                  >
+                    {w}
+                  </span>
+                ))}
+              </motion.div>
             </div>
           ) : (
-            /* Desktop: spotlight reveal via clip-path */
+            /* Desktop: cursor spotlight */
             <div ref={wordsRef} className="relative">
               {/* Dim layer */}
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none">
@@ -135,7 +195,7 @@ export function SpotlightSection() {
                 ))}
               </div>
 
-              {/* Gold revealed layer — clip-path space is relative to this same div */}
+              {/* Gold revealed layer */}
               <motion.div
                 className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none"
                 style={{ clipPath }}

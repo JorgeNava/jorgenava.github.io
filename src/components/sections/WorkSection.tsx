@@ -2,8 +2,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
-import { useIsMobile } from "@/hooks/useIsMobile";
-
 const E = [0.16, 1, 0.3, 1] as const;
 
 const PROJECTS = [
@@ -120,13 +118,12 @@ function ProjectCard({
   small?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
-  const isMobile = useIsMobile();
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Mobile: reveal description when card is in the centre third of the viewport
+  // Reveal description when card is in the centre third of the viewport (works on all devices)
   const [centerVisible, setCenterVisible] = useState(false);
   useEffect(() => {
-    if (!isMobile || project.featured) return;
+    if (project.featured) return;
     const el = cardRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -135,9 +132,9 @@ function ProjectCard({
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [isMobile, project.featured]);
+  }, [project.featured]);
 
-  const showDesc = project.featured || hovered || (isMobile && centerVisible);
+  const showDesc = project.featured || hovered || centerVisible;
 
   const inner = (
     <>
