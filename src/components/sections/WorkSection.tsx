@@ -29,17 +29,6 @@ const PROJECTS = [
     featured: false,
   },
   {
-    name: "Bamberg Cervecería",
-    type: "Plataforma LMS",
-    year: "2025",
-    desc: "Plataforma de aprendizaje en línea para la industria cervecera artesanal. Brewery Experience Hub con cursos, módulos y certificaciones.",
-    gradient:
-      "radial-gradient(ellipse 80% 80% at 20% 80%, rgba(110,60,10,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 20%, rgba(80,40,5,0.35) 0%, transparent 60%)",
-    href: "#",
-    num: "03",
-    featured: false,
-  },
-  {
     name: "Chinaco Tequila",
     type: "Presencia Digital",
     year: "2024",
@@ -47,7 +36,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 80%, rgba(10,60,70,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 20%, rgba(5,40,50,0.35) 0%, transparent 60%)",
     href: "https://chinacotequila.com",
-    num: "04",
+    num: "03",
     featured: false,
   },
   {
@@ -58,7 +47,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 50% 10%, rgba(30,60,110,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 50% 90%, rgba(20,40,80,0.35) 0%, transparent 60%)",
     href: "https://ina.com.mx",
-    num: "05",
+    num: "04",
     featured: false,
   },
   {
@@ -69,7 +58,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 50%, rgba(60,20,100,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 50%, rgba(40,10,70,0.35) 0%, transparent 60%)",
     href: "https://agenciamano.mx",
-    num: "06",
+    num: "05",
     featured: false,
   },
   {
@@ -80,7 +69,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(10,60,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(5,40,60,0.35) 0%, transparent 60%)",
     href: "https://a118.mx",
-    num: "07",
+    num: "06",
     featured: false,
   },
   {
@@ -90,8 +79,8 @@ const PROJECTS = [
     desc: "Plataforma digital desarrollada a medida con arquitectura moderna y experiencia de usuario optimizada.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 30% 70%, rgba(0,90,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 70% 30%, rgba(0,60,55,0.35) 0%, transparent 60%)",
-    href: "#",
-    num: "08",
+    href: "https://iowabrace.com.mx",
+    num: "07",
     featured: false,
   },
   {
@@ -101,8 +90,8 @@ const PROJECTS = [
     desc: "Sitio web y presencia digital para proyecto especializado en el mercado mexicano.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 70% 20%, rgba(120,40,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 30% 80%, rgba(90,25,10,0.35) 0%, transparent 60%)",
-    href: "#",
-    num: "09",
+    href: "https://ponseti.com.mx",
+    num: "08",
     featured: false,
   },
   {
@@ -112,8 +101,8 @@ const PROJECTS = [
     desc: "Experiencia web interactiva con diseño único y arquitectura orientada al rendimiento y la conversión.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 30%, rgba(60,90,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 70%, rgba(40,65,10,0.35) 0%, transparent 60%)",
-    href: "#",
-    num: "10",
+    href: "https://kurunjuatha.com",
+    num: "09",
     featured: false,
   },
 ];
@@ -130,44 +119,33 @@ function ProjectCard({
   small?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
-  const hasLink = project.href !== "#";
 
   const inner = (
     <>
-      {/* Gradient bg */}
       <div
         className="absolute inset-0 transition-opacity duration-700"
         style={{ background: project.gradient, opacity: hovered ? 1 : 0.7 }}
         aria-hidden
       />
-
-      {/* Gold border on hover */}
       <div
         className="absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none"
         style={{ boxShadow: "inset 0 0 0 1px rgba(196,153,95,0.3)", opacity: hovered ? 1 : 0 }}
         aria-hidden
       />
 
-      {/* Content */}
-      <div className={`relative z-10 flex flex-col justify-between ${small ? "p-6 min-h-[230px]" : project.featured ? "p-8 lg:p-10 min-h-[360px]" : "p-8 min-h-[260px]"}`}>
-        {/* Top */}
+      <div className={`relative z-10 flex flex-col justify-between ${small ? "p-6 min-h-[250px]" : project.featured ? "p-8 lg:p-10 min-h-[360px]" : "p-8 min-h-[280px]"}`}>
         <div className="flex items-start justify-between">
-          <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">
-            {project.num}
-          </span>
-          {hasLink && (
-            <motion.span
-              className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
-              initial={{ opacity: 0, x: 8 }}
-              animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
-              transition={{ duration: 0.3 }}
-            >
-              Ver ↗
-            </motion.span>
-          )}
+          <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">{project.num}</span>
+          <motion.span
+            className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
+            initial={{ opacity: 0, x: 8 }}
+            animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
+            transition={{ duration: 0.3 }}
+          >
+            Ver ↗
+          </motion.span>
         </div>
 
-        {/* Middle */}
         <div className="flex flex-col gap-3 mt-auto">
           <h3
             className="font-display font-light text-fg leading-[1.05] tracking-[-0.01em]"
@@ -175,7 +153,7 @@ function ProjectCard({
               fontSize: project.featured
                 ? "clamp(28px, 4.5vw, 52px)"
                 : small
-                ? "clamp(18px, 2vw, 24px)"
+                ? "clamp(18px, 2vw, 26px)"
                 : "clamp(20px, 2.8vw, 32px)",
             }}
           >
@@ -191,22 +169,16 @@ function ProjectCard({
           </motion.p>
         </div>
 
-        {/* Bottom */}
         <div className={`flex items-center justify-between border-t border-white/[0.06] ${small ? "pt-4 mt-4" : "pt-5 mt-6"}`}>
-          <span className="font-mono text-[10px] tracking-[0.15em] text-fg-muted uppercase">
-            {project.type}
-          </span>
-          <span className="font-mono text-[10px] tracking-[0.15em] text-fg-subtle uppercase">
-            {project.year}
-          </span>
+          <span className="font-mono text-[10px] tracking-[0.15em] text-fg-muted uppercase">{project.type}</span>
+          <span className="font-mono text-[10px] tracking-[0.15em] text-fg-subtle uppercase">{project.year}</span>
         </div>
       </div>
     </>
   );
 
-  const sharedClass = `relative overflow-hidden rounded-2xl border border-border ${hasLink ? "cursor-pointer" : "cursor-default"}`;
-  const motionProps = {
-    className: sharedClass,
+  const shared = {
+    className: "relative overflow-hidden rounded-2xl border border-border cursor-pointer",
     style: { background: "#0D0B12" } as React.CSSProperties,
     initial: { opacity: 0, y: 30 },
     animate: inView ? { opacity: 1, y: 0 } : {},
@@ -215,23 +187,10 @@ function ProjectCard({
     onMouseLeave: () => setHovered(false),
   };
 
-  if (hasLink) {
-    return (
-      <motion.a
-        href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        {...motionProps}
-      >
-        {inner}
-      </motion.a>
-    );
-  }
-
   return (
-    <motion.div {...motionProps}>
+    <motion.a href={project.href} target="_blank" rel="noopener noreferrer" {...shared}>
       {inner}
-    </motion.div>
+    </motion.a>
   );
 }
 
@@ -256,11 +215,8 @@ export function WorkSection() {
         </motion.div>
 
         <div className="flex flex-col gap-4">
-          {/* Featured card — full width */}
           <ProjectCard project={featured} index={0} inView={inView} />
-
-          {/* Remaining 9 — 3-column grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {rest.map((p, i) => (
               <ProjectCard key={p.num} project={p} index={i + 1} inView={inView} small />
             ))}
