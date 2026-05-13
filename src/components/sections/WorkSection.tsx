@@ -1,7 +1,8 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "motion/react";
 import { Container } from "@/components/ui/Container";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const E = [0.16, 1, 0.3, 1] as const;
 
@@ -119,21 +120,45 @@ function ProjectCard({
   small?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
+  const isMobile = useIsMobile();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Mobile: reveal description when card is in the centre third of the viewport
+  const [centerVisible, setCenterVisible] = useState(false);
+  useEffect(() => {
+    if (!isMobile || project.featured) return;
+    const el = cardRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => setCenterVisible(e.isIntersecting),
+      { rootMargin: "-32% 0px -32% 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [isMobile, project.featured]);
+
+  const showDesc = project.featured || hovered || (isMobile && centerVisible);
 
   const inner = (
     <>
+      {/* Gradient bg */}
       <div
         className="absolute inset-0 transition-opacity duration-700"
         style={{ background: project.gradient, opacity: hovered ? 1 : 0.7 }}
         aria-hidden
       />
+      {/* Gold border on hover / center-visible */}
       <div
         className="absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none"
-        style={{ boxShadow: "inset 0 0 0 1px rgba(196,153,95,0.3)", opacity: hovered ? 1 : 0 }}
+        style={{ boxShadow: "inset 0 0 0 1px rgba(196,153,95,0.3)", opacity: showDesc ? 1 : 0 }}
         aria-hidden
       />
 
-      <div className={`relative z-10 flex flex-col justify-between ${small ? "p-6 min-h-[250px]" : project.featured ? "p-8 lg:p-10 min-h-[360px]" : "p-8 min-h-[280px]"}`}>
+      <div
+        className={`relative z-10 flex flex-col justify-between ${
+          small ? "p-6 min-h-[250px]" : project.featured ? "p-8 lg:p-10 min-h-[360px]" : "p-8 min-h-[280px]"
+        }`}
+      >
         <div className="flex items-start justify-between">
           <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">{project.num}</span>
           <motion.span
@@ -159,17 +184,22 @@ function ProjectCard({
           >
             {project.name}
           </h3>
+          {/* Description: always visible on featured; scroll-reveal on mobile; hover on desktop */}
           <motion.p
             className="text-sm text-fg-muted leading-relaxed max-w-sm"
             initial={{ opacity: 0, y: 8 }}
-            animate={hovered || project.featured ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-            transition={{ duration: 0.4, delay: 0.05 }}
+            animate={showDesc ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.45 }}
           >
             {project.desc}
           </motion.p>
         </div>
 
-        <div className={`flex items-center justify-between border-t border-white/[0.06] ${small ? "pt-4 mt-4" : "pt-5 mt-6"}`}>
+        <div
+          className={`flex items-center justify-between border-t border-white/[0.06] ${
+            small ? "pt-4 mt-4" : "pt-5 mt-6"
+          }`}
+        >
           <span className="font-mono text-[10px] tracking-[0.15em] text-fg-muted uppercase">{project.type}</span>
           <span className="font-mono text-[10px] tracking-[0.15em] text-fg-subtle uppercase">{project.year}</span>
         </div>
@@ -177,7 +207,8 @@ function ProjectCard({
     </>
   );
 
-  const shared = {
+  const motionProps = {
+    ref: cardRef,
     className: "relative overflow-hidden rounded-2xl border border-border cursor-pointer",
     style: { background: "#0D0B12" } as React.CSSProperties,
     initial: { opacity: 0, y: 30 },
@@ -188,9 +219,17 @@ function ProjectCard({
   };
 
   return (
-    <motion.a href={project.href} target="_blank" rel="noopener noreferrer" {...shared}>
+    <motion.div {...motionProps}>
+      {/* Invisible anchor overlay for navigation */}
+      <a
+        href={project.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute inset-0 z-20"
+        aria-label={`Ver proyecto ${project.name}`}
+      />
       {inner}
-    </motion.a>
+    </motion.div>
   );
 }
 

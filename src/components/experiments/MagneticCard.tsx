@@ -21,12 +21,27 @@ export function MagneticCard() {
     y.set(0);
   };
 
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const touch = e.touches[0];
+    x.set((touch.clientX - (rect.left + rect.width / 2)) * 0.38);
+    y.set((touch.clientY - (rect.top + rect.height / 2)) * 0.38);
+  };
+
+  const onTouchEnd = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <div
       ref={containerRef}
       className="relative flex h-full w-full items-center justify-center overflow-hidden"
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       {/* dot grid */}
       <div
@@ -43,7 +58,7 @@ export function MagneticCard() {
         className="relative flex h-16 w-44 items-center justify-center rounded-full border border-white/18 bg-white/5 backdrop-blur-sm"
       >
         <span className="font-mono text-[11px] tracking-[0.2em] text-fg-muted uppercase select-none">
-          hover me
+          muéveme
         </span>
       </motion.div>
     </div>

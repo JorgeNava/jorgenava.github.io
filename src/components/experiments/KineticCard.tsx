@@ -25,8 +25,8 @@ export function KineticCard() {
               }}
               animate={{ y: yOffset, scale }}
               transition={{ type: "spring", stiffness: 320, damping: 22 }}
-              onHoverStart={() => setActiveIndex(i)}
-              onHoverEnd={() => setActiveIndex(null)}
+              onPointerEnter={() => setActiveIndex(i)}
+              onPointerLeave={() => setActiveIndex(null)}
             >
               {char}
             </motion.span>
@@ -34,7 +34,7 @@ export function KineticCard() {
         })}
       </div>
       <p className="font-mono text-[11px] tracking-[0.18em] text-fg-subtle uppercase">
-        hover sobre cada letra
+        toca cada letra
       </p>
     </div>
   );

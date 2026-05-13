@@ -150,81 +150,41 @@ export function Contact() {
             O escríbeme directamente
           </p>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-0">
-            {/* Left col — nombre + email */}
-            <div className="flex flex-col">
-              {/* Nombre */}
-              <div className="flex flex-col gap-2 mb-10">
-                <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={form.nombre}
-                  onChange={handleChange}
-                  required
-                  placeholder="Tu nombre"
-                  className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
-                />
-              </div>
-
-              {/* Email */}
-              <div className="flex flex-col gap-2 mb-10">
-                <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="tu@email.com"
-                  className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
-                />
-              </div>
-
-              {/* Submit */}
-              <div className="mt-auto pt-4">
-                <AnimatePresence mode="wait">
-                  {sent ? (
-                    <motion.p
-                      key="sent"
-                      className="font-mono text-[10px] tracking-[0.25em] text-gold uppercase"
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      ✓ Mensaje enviado — revisa tu cliente de correo
-                    </motion.p>
-                  ) : (
-                    <motion.button
-                      key="btn"
-                      type="submit"
-                      disabled={sending}
-                      className="group flex items-center gap-4 border border-white/35 px-8 py-4 font-mono text-[10px] tracking-[0.25em] text-fg uppercase hover:border-gold/60 hover:text-gold transition-all duration-300 disabled:opacity-50"
-                      initial={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      {sending ? "Enviando…" : "Enviar mensaje"}
-                      {!sending && (
-                        <motion.span
-                          className="text-gold"
-                          animate={{ x: [0, 4, 0] }}
-                          transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                        >
-                          →
-                        </motion.span>
-                      )}
-                    </motion.button>
-                  )}
-                </AnimatePresence>
-              </div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] gap-x-16">
+            {/* Nombre — left col row 1 */}
+            <div className="flex flex-col gap-2 mb-10 lg:col-start-1 lg:row-start-1">
+              <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
+                Nombre
+              </label>
+              <input
+                type="text"
+                name="nombre"
+                value={form.nombre}
+                onChange={handleChange}
+                required
+                placeholder="Tu nombre"
+                className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
+              />
             </div>
 
-            {/* Right col — mensaje */}
-            <div className="flex flex-col gap-2 lg:row-span-3">
+            {/* Email — left col row 2 */}
+            <div className="flex flex-col gap-2 mb-10 lg:col-start-1 lg:row-start-2">
+              <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+                placeholder="tu@email.com"
+                className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
+              />
+            </div>
+
+            {/* Mensaje — right col rows 1-3; in DOM order before button so mobile shows it before submit */}
+            <div className="flex flex-col gap-2 mb-10 lg:col-start-2 lg:row-start-1 lg:row-span-3">
               <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
                 Mensaje
               </label>
@@ -237,6 +197,43 @@ export function Contact() {
                 placeholder="Cuéntame sobre tu proyecto…"
                 className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300 resize-none flex-1"
               />
+            </div>
+
+            {/* Submit — left col row 3 */}
+            <div className="pt-4 lg:col-start-1 lg:row-start-3">
+              <AnimatePresence mode="wait">
+                {sent ? (
+                  <motion.p
+                    key="sent"
+                    className="font-mono text-[10px] tracking-[0.25em] text-gold uppercase"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    ✓ Mensaje enviado — revisa tu cliente de correo
+                  </motion.p>
+                ) : (
+                  <motion.button
+                    key="btn"
+                    type="submit"
+                    disabled={sending}
+                    className="group flex items-center gap-4 border border-white/35 px-8 py-4 font-mono text-[10px] tracking-[0.25em] text-fg uppercase hover:border-gold/60 hover:text-gold transition-all duration-300 disabled:opacity-50"
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {sending ? "Enviando…" : "Enviar mensaje"}
+                    {!sending && (
+                      <motion.span
+                        className="text-gold"
+                        animate={{ x: [0, 4, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                      >
+                        →
+                      </motion.span>
+                    )}
+                  </motion.button>
+                )}
+              </AnimatePresence>
             </div>
           </form>
         </motion.div>

@@ -36,6 +36,7 @@ export function MorphCard() {
         }
       }}
       onMouseLeave={() => setHovering(false)}
+      onClick={next}
     >
       <div
         className="h-28 w-28 bg-white/12 border border-white/20"
@@ -54,7 +55,7 @@ export function MorphCard() {
           {SHAPES[idx].label}
         </p>
         <p className="font-mono text-[10px] tracking-[0.15em] text-fg-subtle uppercase">
-          hover para transformar
+          toca o pasa el cursor
         </p>
       </div>
     </div>
