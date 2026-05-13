@@ -10,45 +10,78 @@ const PROJECTS = [
     name: "One Spark",
     type: "Consultoría Digital",
     year: "2022 — Presente",
-    tags: ["Estrategia", "Desarrollo", "Marca"],
-    desc: "Consultoría de emprendimiento digital. Acompañamos a empresas desde la estrategia hasta el producto terminado.",
+    desc: "Consultoría de emprendimiento digital. Acompañamos a empresas desde la estrategia hasta el producto terminado: web, eCommerce, SEO y automatización.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 20%, rgba(80,30,180,0.5) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 80%, rgba(40,15,100,0.4) 0%, transparent 60%)",
     href: "https://one-spark.com.mx",
     num: "01",
+    featured: true,
   },
   {
     name: "Maestros Joyeros",
     type: "eCommerce + SEO & GEO",
     year: "2024",
-    tags: ["Shopify", "SEO", "Automatización"],
-    desc: "Tienda Shopify de alta conversión con sistema de citas, control de precios y módulo de reparaciones.",
+    desc: "Tienda Shopify de alta conversión con sistema de citas, control de precios y módulo de reparaciones para joyería premium.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(100,90,110,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(60,55,70,0.35) 0%, transparent 60%)",
-    href: "#",
+    href: "https://maestrosjoyeros.com",
     num: "02",
+    featured: false,
   },
   {
     name: "Bamberg Cervecería",
-    type: "Plataforma LMS Cervecera",
+    type: "Plataforma LMS",
     year: "2025",
-    tags: ["Next.js", "AWS Lambda", "LMS"],
-    desc: "Plataforma de aprendizaje en línea para la industria cervecera artesanal. Brewery Experience Hub.",
+    desc: "Plataforma de aprendizaje en línea para la industria cervecera artesanal. Brewery Experience Hub con cursos, módulos y certificaciones.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 80%, rgba(110,60,10,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 20%, rgba(80,40,5,0.35) 0%, transparent 60%)",
     href: "#",
     num: "03",
+    featured: false,
   },
   {
     name: "Chinaco Tequila",
     type: "Presencia Digital",
     year: "2024",
-    tags: ["Web", "Diseño", "SEO"],
     desc: "Sitio web y estrategia de presencia digital para marca de tequila premium con distribución internacional.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 80%, rgba(10,60,70,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 20%, rgba(5,40,50,0.35) 0%, transparent 60%)",
-    href: "#",
+    href: "https://chinacotequila.com",
     num: "04",
+    featured: false,
+  },
+  {
+    name: "INA Autopartes",
+    type: "Portal Digital",
+    year: "2023",
+    desc: "Portal digital institucional para el Instituto Nacional de Autopartes de México.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 50% 10%, rgba(30,60,110,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 50% 90%, rgba(20,40,80,0.35) 0%, transparent 60%)",
+    href: "https://ina.com.mx",
+    num: "05",
+    featured: false,
+  },
+  {
+    name: "Agencia Mano",
+    type: "Sitio Web",
+    year: "2023",
+    desc: "Sitio web institucional y portfolio para agencia creativa mexicana.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 20% 50%, rgba(60,20,100,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 50%, rgba(40,10,70,0.35) 0%, transparent 60%)",
+    href: "#",
+    num: "06",
+    featured: false,
+  },
+  {
+    name: "Agua Marina",
+    type: "Tienda en Línea",
+    year: "2023",
+    desc: "Tienda en línea de accesorios y moda con catálogo, gestión de inventario y pasarela de pagos integrada.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(10,60,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(5,40,60,0.35) 0%, transparent 60%)",
+    href: "#",
+    num: "07",
+    featured: false,
   },
 ];
 
@@ -62,39 +95,39 @@ function ProjectCard({
   inView: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
+  const hasLink = project.href !== "#";
+
+  const handleClick = () => {
+    if (hasLink) window.open(project.href, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-2xl border border-border cursor-pointer"
+      className={`relative overflow-hidden rounded-2xl border border-border ${hasLink ? "cursor-pointer" : "cursor-default"}`}
       style={{ background: "#0D0B12" }}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.9, delay: 0.1 + index * 0.1, ease: E }}
+      transition={{ duration: 0.9, delay: 0.08 + index * 0.08, ease: E }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
     >
       {/* Gradient bg */}
       <div
         className="absolute inset-0 transition-opacity duration-700"
-        style={{
-          background: project.gradient,
-          opacity: hovered ? 1 : 0.7,
-        }}
+        style={{ background: project.gradient, opacity: hovered ? 1 : 0.7 }}
         aria-hidden
       />
 
       {/* Gold border on hover */}
       <div
         className="absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none"
-        style={{
-          boxShadow: "inset 0 0 0 1px rgba(196,153,95,0.3)",
-          opacity: hovered ? 1 : 0,
-        }}
+        style={{ boxShadow: "inset 0 0 0 1px rgba(196,153,95,0.3)", opacity: hovered ? 1 : 0 }}
         aria-hidden
       />
 
       {/* Content */}
-      <div className="relative z-10 p-8 lg:p-10 flex flex-col justify-between min-h-[320px]">
+      <div className={`relative z-10 p-8 lg:p-10 flex flex-col justify-between ${project.featured ? "min-h-[360px]" : "min-h-[280px]"}`}>
         {/* Top */}
         <div className="flex items-start justify-between">
           <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">
@@ -103,25 +136,25 @@ function ProjectCard({
           <motion.span
             className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
             initial={{ opacity: 0, x: 8 }}
-            animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
+            animate={hovered && hasLink ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
             transition={{ duration: 0.3 }}
           >
-            Ver proyecto →
+            Ver proyecto ↗
           </motion.span>
         </div>
 
         {/* Middle */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mt-auto">
           <h3
             className="font-display font-light text-fg leading-[1.05] tracking-[-0.01em]"
-            style={{ fontSize: "clamp(26px, 4vw, 42px)" }}
+            style={{ fontSize: project.featured ? "clamp(30px, 4.5vw, 52px)" : "clamp(22px, 3vw, 36px)" }}
           >
             {project.name}
           </h3>
           <motion.p
-            className="text-sm text-fg-muted leading-relaxed max-w-xs"
+            className="text-sm text-fg-muted leading-relaxed max-w-sm"
             initial={{ opacity: 0, y: 8 }}
-            animate={hovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            animate={hovered || project.featured ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
             transition={{ duration: 0.4, delay: 0.05 }}
           >
             {project.desc}
@@ -129,7 +162,7 @@ function ProjectCard({
         </div>
 
         {/* Bottom */}
-        <div className="flex items-center justify-between pt-6 border-t border-white/08 mt-4">
+        <div className="flex items-center justify-between pt-5 border-t border-white/[0.06] mt-6">
           <span className="font-mono text-[10px] tracking-[0.15em] text-fg-muted uppercase">
             {project.type}
           </span>
@@ -145,6 +178,8 @@ function ProjectCard({
 export function WorkSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
+  const featured = PROJECTS[0];
+  const rest = PROJECTS.slice(1);
 
   return (
     <section ref={ref} className="py-32 bg-bg border-t border-border">
@@ -160,10 +195,16 @@ export function WorkSection() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase">Proyectos</span>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {PROJECTS.map((p, i) => (
-            <ProjectCard key={p.num} project={p} index={i} inView={inView} />
-          ))}
+        <div className="flex flex-col gap-4">
+          {/* Featured card — full width */}
+          <ProjectCard project={featured} index={0} inView={inView} />
+
+          {/* Rest — 2 column grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {rest.map((p, i) => (
+              <ProjectCard key={p.num} project={p} index={i + 1} inView={inView} />
+            ))}
+          </div>
         </div>
       </Container>
     </section>

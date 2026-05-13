@@ -55,7 +55,16 @@ export function Intro() {
 
         {/* Bio text */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16">
-          <div />
+          <div className="hidden lg:flex flex-col items-center gap-4 pt-2">
+            <div className="w-px h-28 bg-gradient-to-b from-gold/35 to-transparent" />
+            <span
+              className="font-mono text-[9px] tracking-[0.35em] text-fg-subtle/50 uppercase select-none"
+              style={{ writingMode: "vertical-rl", transform: "rotate(180deg)", paddingBlock: "1rem" }}
+            >
+              Guadalajara · México · 2026
+            </span>
+            <div className="w-px h-28 bg-gradient-to-t from-gold/15 to-transparent" />
+          </div>
           <div className="flex flex-col gap-8">
             {[
               "Soy Jorge Nava, arquitecto de software con sede en Guadalajara. Diseño sistemas digitales que escalan: desde APIs serverless y tiendas de alto tráfico hasta estrategias de presencia digital completas.",

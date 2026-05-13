@@ -39,7 +39,7 @@ export function Contact() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, ease: E }}
         >
-          <span className="font-mono text-[10px] tracking-[0.25em] text-gold uppercase">06</span>
+          <span className="font-mono text-[10px] tracking-[0.25em] text-gold uppercase">07</span>
           <span className="block h-px w-10 bg-gold/30" />
           <span className="font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase">Contacto</span>
         </motion.div>

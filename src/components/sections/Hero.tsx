@@ -6,10 +6,11 @@ import { Container } from "@/components/ui/Container";
 const E = [0.16, 1, 0.3, 1] as const;
 
 const BLOBS = [
-  { x: 0.15, y: 0.2,  r: 0.7, color: "rgba(80,30,160,0.35)",  sx: 0.00024, sy: 0.00018, px: 0,   py: 0.7 },
-  { x: 0.82, y: 0.15, r: 0.6, color: "rgba(30,15,100,0.3)",   sx: 0.0002,  sy: 0.00022, px: 1.4, py: 1.1 },
-  { x: 0.5,  y: 0.78, r: 0.65,color: "rgba(50,20,120,0.28)",  sx: 0.00018, sy: 0.00028, px: 2.7, py: 1.9 },
-  { x: 0.78, y: 0.72, r: 0.55,color: "rgba(196,153,95,0.06)", sx: 0.00030, sy: 0.00020, px: 4.0, py: 2.6 },
+  { x: 0.15, y: 0.2,  r: 0.75, color: "rgba(100,30,200,0.65)",  sx: 0.00011, sy: 0.00008, px: 0,   py: 0.7 },
+  { x: 0.82, y: 0.15, r: 0.68, color: "rgba(40,15,150,0.58)",   sx: 0.00009, sy: 0.00011, px: 1.4, py: 1.1 },
+  { x: 0.5,  y: 0.78, r: 0.72, color: "rgba(60,20,170,0.55)",   sx: 0.00008, sy: 0.00013, px: 2.7, py: 1.9 },
+  { x: 0.78, y: 0.72, r: 0.60, color: "rgba(196,153,95,0.16)",  sx: 0.00013, sy: 0.00009, px: 4.0, py: 2.6 },
+  { x: 0.3,  y: 0.55, r: 0.58, color: "rgba(20,80,200,0.42)",   sx: 0.00010, sy: 0.00012, px: 1.8, py: 3.2 },
 ];
 
 export function Hero() {
@@ -45,7 +46,7 @@ export function Hero() {
         ctx.arc(cx, cy, r, 0, Math.PI * 2);
         ctx.fill();
       }
-      t += 16;
+      t += 8;
       id = requestAnimationFrame(draw);
     }
     id = requestAnimationFrame(draw);

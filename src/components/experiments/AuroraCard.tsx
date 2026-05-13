@@ -2,10 +2,11 @@
 import { useEffect, useRef } from "react";
 
 const BLOBS = [
-  { x: 0.25, y: 0.35, r: 0.7, color: "rgba(100,30,200,0.55)", sx: 0.00028, sy: 0.00022, px: 0, py: 0.6 },
-  { x: 0.72, y: 0.25, r: 0.6, color: "rgba(30,50,200,0.45)", sx: 0.00022, sy: 0.00018, px: 1.3, py: 0.9 },
-  { x: 0.5, y: 0.72, r: 0.65, color: "rgba(60,20,160,0.4)", sx: 0.00018, sy: 0.0003, px: 2.6, py: 1.8 },
-  { x: 0.8, y: 0.65, r: 0.5, color: "rgba(20,60,140,0.35)", sx: 0.0003, sy: 0.00025, px: 4.0, py: 2.5 },
+  { x: 0.25, y: 0.35, r: 0.75, color: "rgba(110,30,220,0.72)", sx: 0.00012, sy: 0.00010, px: 0,   py: 0.6 },
+  { x: 0.72, y: 0.25, r: 0.65, color: "rgba(30,60,220,0.62)",  sx: 0.00010, sy: 0.00008, px: 1.3, py: 0.9 },
+  { x: 0.5,  y: 0.72, r: 0.70, color: "rgba(70,20,180,0.58)",  sx: 0.00008, sy: 0.00014, px: 2.6, py: 1.8 },
+  { x: 0.8,  y: 0.65, r: 0.55, color: "rgba(20,70,160,0.50)",  sx: 0.00013, sy: 0.00011, px: 4.0, py: 2.5 },
+  { x: 0.4,  y: 0.5,  r: 0.50, color: "rgba(196,153,95,0.20)", sx: 0.00009, sy: 0.00012, px: 2.0, py: 3.1 },
 ];
 
 export function AuroraCard() {
@@ -46,7 +47,7 @@ export function AuroraCard() {
         ctx.fill();
       }
 
-      t += 16;
+      t += 8;
       animId = requestAnimationFrame(draw);
     }
 
