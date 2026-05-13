@@ -233,6 +233,8 @@ function ProjectCard({
 export function WorkSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
+  const reposLinkRef = useRef<HTMLDivElement>(null);
+  const reposLinkInView = useInView(reposLinkRef, { once: false, margin: "-15% 0px -15% 0px" });
   const featured = PROJECTS[0];
   const rest = PROJECTS.slice(1);
 
@@ -260,18 +262,30 @@ export function WorkSection() {
         </div>
 
         <motion.div
+          ref={reposLinkRef}
           className="flex justify-end mt-10"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.6, ease: E }}
         >
-          <a
+          <motion.a
             href="/repos/"
-            className="group flex items-center gap-3 font-mono text-[10px] tracking-[0.25em] text-fg-subtle uppercase hover:text-gold transition-colors duration-300"
+            className="group flex items-center gap-3 font-mono text-[10px] tracking-[0.25em] uppercase"
+            animate={
+              reposLinkInView
+                ? { color: "#C4995F", filter: "drop-shadow(0 0 8px rgba(196,153,95,0.5))" }
+                : { color: "#2E2C32", filter: "drop-shadow(0 0 0px rgba(196,153,95,0))" }
+            }
+            transition={{ duration: 0.7, ease: E }}
           >
             Ver todos mis repositorios
-            <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-          </a>
+            <motion.span
+              animate={reposLinkInView ? { x: [0, 3, 0], y: [0, -3, 0] } : { x: 0, y: 0 }}
+              transition={{ duration: 0.6, ease: E }}
+            >
+              ↗
+            </motion.span>
+          </motion.a>
         </motion.div>
       </Container>
     </section>
