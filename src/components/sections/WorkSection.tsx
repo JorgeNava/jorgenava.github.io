@@ -68,7 +68,7 @@ const PROJECTS = [
     desc: "Sitio web institucional y portfolio para agencia creativa mexicana.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 50%, rgba(60,20,100,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 50%, rgba(40,10,70,0.35) 0%, transparent 60%)",
-    href: "#",
+    href: "https://agenciamano.mx",
     num: "06",
     featured: false,
   },
@@ -79,8 +79,41 @@ const PROJECTS = [
     desc: "Tienda en línea de accesorios y moda con catálogo, gestión de inventario y pasarela de pagos integrada.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(10,60,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(5,40,60,0.35) 0%, transparent 60%)",
-    href: "#",
+    href: "https://a118.mx",
     num: "07",
+    featured: false,
+  },
+  {
+    name: "Iowabre",
+    type: "Plataforma Digital",
+    year: "2024",
+    desc: "Plataforma digital desarrollada a medida con arquitectura moderna y experiencia de usuario optimizada.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 30% 70%, rgba(0,90,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 70% 30%, rgba(0,60,55,0.35) 0%, transparent 60%)",
+    href: "#",
+    num: "08",
+    featured: false,
+  },
+  {
+    name: "Ponseti",
+    type: "Presencia Digital",
+    year: "2024",
+    desc: "Sitio web y presencia digital para proyecto especializado en el mercado mexicano.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 70% 20%, rgba(120,40,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 30% 80%, rgba(90,25,10,0.35) 0%, transparent 60%)",
+    href: "#",
+    num: "09",
+    featured: false,
+  },
+  {
+    name: "Kurunjuatha",
+    type: "Desarrollo Web",
+    year: "2024",
+    desc: "Experiencia web interactiva con diseño único y arquitectura orientada al rendimiento y la conversión.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 20% 30%, rgba(60,90,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 70%, rgba(40,65,10,0.35) 0%, transparent 60%)",
+    href: "#",
+    num: "10",
     featured: false,
   },
 ];
@@ -89,29 +122,18 @@ function ProjectCard({
   project,
   index,
   inView,
+  small = false,
 }: {
   project: (typeof PROJECTS)[0];
   index: number;
   inView: boolean;
+  small?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const hasLink = project.href !== "#";
 
-  const handleClick = () => {
-    if (hasLink) window.open(project.href, "_blank", "noopener,noreferrer");
-  };
-
-  return (
-    <motion.div
-      className={`relative overflow-hidden rounded-2xl border border-border ${hasLink ? "cursor-pointer" : "cursor-default"}`}
-      style={{ background: "#0D0B12" }}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.9, delay: 0.08 + index * 0.08, ease: E }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={handleClick}
-    >
+  const inner = (
+    <>
       {/* Gradient bg */}
       <div
         className="absolute inset-0 transition-opacity duration-700"
@@ -127,27 +149,35 @@ function ProjectCard({
       />
 
       {/* Content */}
-      <div className={`relative z-10 p-8 lg:p-10 flex flex-col justify-between ${project.featured ? "min-h-[360px]" : "min-h-[280px]"}`}>
+      <div className={`relative z-10 flex flex-col justify-between ${small ? "p-6 min-h-[230px]" : project.featured ? "p-8 lg:p-10 min-h-[360px]" : "p-8 min-h-[260px]"}`}>
         {/* Top */}
         <div className="flex items-start justify-between">
           <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">
             {project.num}
           </span>
-          <motion.span
-            className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
-            initial={{ opacity: 0, x: 8 }}
-            animate={hovered && hasLink ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
-            transition={{ duration: 0.3 }}
-          >
-            Ver proyecto ↗
-          </motion.span>
+          {hasLink && (
+            <motion.span
+              className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
+              initial={{ opacity: 0, x: 8 }}
+              animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
+              transition={{ duration: 0.3 }}
+            >
+              Ver ↗
+            </motion.span>
+          )}
         </div>
 
         {/* Middle */}
         <div className="flex flex-col gap-3 mt-auto">
           <h3
             className="font-display font-light text-fg leading-[1.05] tracking-[-0.01em]"
-            style={{ fontSize: project.featured ? "clamp(30px, 4.5vw, 52px)" : "clamp(22px, 3vw, 36px)" }}
+            style={{
+              fontSize: project.featured
+                ? "clamp(28px, 4.5vw, 52px)"
+                : small
+                ? "clamp(18px, 2vw, 24px)"
+                : "clamp(20px, 2.8vw, 32px)",
+            }}
           >
             {project.name}
           </h3>
@@ -162,7 +192,7 @@ function ProjectCard({
         </div>
 
         {/* Bottom */}
-        <div className="flex items-center justify-between pt-5 border-t border-white/[0.06] mt-6">
+        <div className={`flex items-center justify-between border-t border-white/[0.06] ${small ? "pt-4 mt-4" : "pt-5 mt-6"}`}>
           <span className="font-mono text-[10px] tracking-[0.15em] text-fg-muted uppercase">
             {project.type}
           </span>
@@ -171,6 +201,36 @@ function ProjectCard({
           </span>
         </div>
       </div>
+    </>
+  );
+
+  const sharedClass = `relative overflow-hidden rounded-2xl border border-border ${hasLink ? "cursor-pointer" : "cursor-default"}`;
+  const motionProps = {
+    className: sharedClass,
+    style: { background: "#0D0B12" } as React.CSSProperties,
+    initial: { opacity: 0, y: 30 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 0.9, delay: 0.06 + index * 0.07, ease: E },
+    onMouseEnter: () => setHovered(true),
+    onMouseLeave: () => setHovered(false),
+  };
+
+  if (hasLink) {
+    return (
+      <motion.a
+        href={project.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...motionProps}
+      >
+        {inner}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.div {...motionProps}>
+      {inner}
     </motion.div>
   );
 }
@@ -199,10 +259,10 @@ export function WorkSection() {
           {/* Featured card — full width */}
           <ProjectCard project={featured} index={0} inView={inView} />
 
-          {/* Rest — 2 column grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Remaining 9 — 3-column grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {rest.map((p, i) => (
-              <ProjectCard key={p.num} project={p} index={i + 1} inView={inView} />
+              <ProjectCard key={p.num} project={p} index={i + 1} inView={inView} small />
             ))}
           </div>
         </div>

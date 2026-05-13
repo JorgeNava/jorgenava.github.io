@@ -22,9 +22,9 @@ export function SpotlightSection() {
   const mouseY = useMotionValue(0);
   const radius = useMotionValue(0);
 
-  const springX = useSpring(mouseX, { stiffness: 80, damping: 18 });
-  const springY = useSpring(mouseY, { stiffness: 80, damping: 18 });
-  const springR = useSpring(radius, { stiffness: 60, damping: 20 });
+  const springX = useSpring(mouseX, { stiffness: 320, damping: 35 });
+  const springY = useSpring(mouseY, { stiffness: 320, damping: 35 });
+  const springR = useSpring(radius, { stiffness: 180, damping: 28 });
 
   const clipPath = useMotionTemplate`circle(${springR}px at ${springX}px ${springY}px)`;
 
