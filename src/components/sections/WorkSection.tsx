@@ -258,6 +258,21 @@ export function WorkSection() {
             ))}
           </div>
         </div>
+
+        <motion.div
+          className="flex justify-end mt-10"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.6, ease: E }}
+        >
+          <a
+            href="/repos/"
+            className="group flex items-center gap-3 font-mono text-[10px] tracking-[0.25em] text-fg-subtle uppercase hover:text-gold transition-colors duration-300"
+          >
+            Ver todos mis repositorios
+            <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+          </a>
+        </motion.div>
       </Container>
     </section>
   );
