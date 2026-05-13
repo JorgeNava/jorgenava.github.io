@@ -106,6 +106,27 @@ export function Intro() {
                 {p}
               </motion.p>
             ))}
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.9, delay: 0.62, ease: E }}
+            >
+              <a
+                href="/cv-jorge-nava.pdf"
+                download="CV Jorge Nava.pdf"
+                className="group inline-flex items-center gap-4 border border-white/20 px-7 py-3.5 font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase hover:border-gold/50 hover:text-gold transition-all duration-300"
+              >
+                Descargar CV
+                <motion.span
+                  className="text-gold"
+                  animate={{ y: [0, -2, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                >
+                  ↓
+                </motion.span>
+              </a>
+            </motion.div>
           </div>
         </div>
       </Container>

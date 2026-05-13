@@ -7,9 +7,10 @@ const E = [0.16, 1, 0.3, 1] as const;
 const EMAIL = "jorgenavadelapena@gmail.com";
 
 const LINKS = [
-  { label: "GitHub",   href: "https://github.com/JorgeNava" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/jorge-nava123/" },
+  { label: "GitHub",    href: "https://github.com/JorgeNava" },
+  { label: "LinkedIn",  href: "https://www.linkedin.com/in/jorge-nava123/" },
   { label: "One Spark", href: "https://one-spark.com.mx" },
+  { label: "Curriculum Vitae", href: "/cv-jorge-nava.pdf", download: "CV Jorge Nava.pdf" },
 ];
 
 type FormState = { nombre: string; email: string; mensaje: string };
@@ -117,21 +118,20 @@ export function Contact() {
               </div>
             </button>
 
-            {/* Social links */}
+            {/* Social links + CV */}
             <div className="flex flex-col gap-0">
               {LINKS.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(l.download ? { download: l.download } : { target: "_blank", rel: "noopener noreferrer" })}
                   className="group flex items-center justify-between border-b border-border py-4 hover:border-gold/40 transition-colors duration-300"
                 >
                   <span className="text-base text-fg-muted group-hover:text-fg transition-colors duration-300">
                     {l.label}
                   </span>
                   <span className="font-mono text-xs text-fg-subtle group-hover:text-gold transition-colors duration-300">
-                    ↗
+                    {l.download ? "↓" : "↗"}
                   </span>
                 </a>
               ))}
