@@ -1,7 +1,6 @@
 "use client";
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 
 const E = [0.16, 1, 0.3, 1] as const;
@@ -75,14 +74,12 @@ export function Intro() {
               style={{ background: "linear-gradient(to top, rgba(6,6,8,0.5) 0%, transparent 100%)" }}
               aria-hidden
             />
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src="/jorge.jpg"
               alt="Jorge Nava"
-              width={600}
-              height={800}
               className="w-full object-cover"
-              style={{ aspectRatio: "3/4" }}
-              priority
+              style={{ aspectRatio: "3/4", display: "block" }}
             />
             {/* Caption */}
             <div className="absolute bottom-5 left-6 z-20">

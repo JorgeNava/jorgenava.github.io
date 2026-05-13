@@ -18,15 +18,14 @@ export function SpotlightSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
 
+  // Position: raw values — zero lag, tracks cursor exactly
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  // Radius: spring only for smooth enter/leave transition
   const radius = useMotionValue(0);
-
-  const springX = useSpring(mouseX, { stiffness: 700, damping: 60 });
-  const springY = useSpring(mouseY, { stiffness: 700, damping: 60 });
   const springR = useSpring(radius, { stiffness: 280, damping: 35 });
 
-  const clipPath = useMotionTemplate`circle(${springR}px at ${springX}px ${springY}px)`;
+  const clipPath = useMotionTemplate`circle(${springR}px at ${mouseX}px ${mouseY}px)`;
 
   const [entered, setEntered] = useState(false);
 
@@ -57,7 +56,6 @@ export function SpotlightSection() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Ambient glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 50% 40% at 50% 50%, rgba(196,153,95,0.03) 0%, transparent 70%)" }}
@@ -65,7 +63,6 @@ export function SpotlightSection() {
       />
 
       <Container className="relative z-10">
-        {/* Section label */}
         <motion.div
           className="flex items-center gap-4 mb-20"
           initial={{ opacity: 0 }}
@@ -77,7 +74,6 @@ export function SpotlightSection() {
           <span className="font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase">Stack Tecnológico</span>
         </motion.div>
 
-        {/* Heading */}
         <div className="overflow-hidden mb-3">
           <motion.h2
             className="font-display font-light text-fg leading-[0.9] tracking-[-0.01em]"
@@ -90,7 +86,6 @@ export function SpotlightSection() {
           </motion.h2>
         </div>
 
-        {/* Hint */}
         <motion.p
           className="font-mono text-[10px] tracking-[0.25em] text-fg-subtle uppercase mb-16"
           initial={{ opacity: 0 }}
@@ -100,26 +95,22 @@ export function SpotlightSection() {
           {entered ? "Sigue explorando →" : "Mueve el cursor para explorar →"}
         </motion.p>
 
-        {/* Words grid — two stacked layers */}
         <motion.div
           className="relative"
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.3, ease: E }}
         >
-          {/* Dim layer (always visible) */}
+          {/* Dim layer */}
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1">
             {WORDS.map((w) => (
-              <span
-                key={w}
-                className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none"
-              >
+              <span key={w} className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none">
                 {w}
               </span>
             ))}
           </div>
 
-          {/* Gold revealed layer — clipped to spotlight */}
+          {/* Gold revealed layer — position tracks cursor with zero lag */}
           <motion.div
             className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none"
             style={{ clipPath }}
