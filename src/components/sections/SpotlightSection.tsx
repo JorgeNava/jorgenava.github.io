@@ -8,7 +8,7 @@ const E = [0.16, 1, 0.3, 1] as const;
 const WORDS = [
   "NEXT.JS", "REACT", "TYPESCRIPT", "NODE.JS", "AWS",
   "SERVERLESS", "SHOPIFY", "POSTGRESQL", "TAILWIND", "MOTION",
-  "CLAUDE API", "SUPABASE", "CI/CD", "PYTHON", "FIGMA",
+  "CLAUDE API", "SUBABASE", "CI/CD", "PYTHON", "FIGMA",
   "GITHUB ACTIONS", "VERCEL", "DYNAMODB", "REST APIs", "GRAPHQL",
   "SAM CLI", "REDIS", "LENIS", "LIQUID", "LANGCHAIN",
   "SEO", "GEO", "RAG", "FRAMER", "SHADCN UI",
@@ -18,28 +18,26 @@ export function SpotlightSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
 
-  // Position: raw values — zero lag, tracks cursor exactly
+  // Coordinates are relative to the words grid div, matching clip-path space
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  // Radius: spring only for smooth enter/leave transition
   const radius = useMotionValue(0);
   const springR = useSpring(radius, { stiffness: 280, damping: 35 });
-
   const clipPath = useMotionTemplate`circle(${springR}px at ${mouseX}px ${mouseY}px)`;
 
   const [entered, setEntered] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     mouseX.set(e.clientX - rect.left);
     mouseY.set(e.clientY - rect.top);
   };
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     mouseX.set(e.clientX - rect.left);
     mouseY.set(e.clientY - rect.top);
-    radius.set(220);
+    radius.set(200);
     setEntered(true);
   };
 
@@ -49,13 +47,7 @@ export function SpotlightSection() {
   };
 
   return (
-    <section
-      ref={ref}
-      className="py-40 bg-bg border-t border-border overflow-hidden relative select-none"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <section ref={ref} className="py-40 bg-bg border-t border-border overflow-hidden relative select-none">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 50% 40% at 50% 50%, rgba(196,153,95,0.03) 0%, transparent 70%)" }}
@@ -95,14 +87,18 @@ export function SpotlightSection() {
           {entered ? "Sigue explorando →" : "Mueve el cursor para explorar →"}
         </motion.p>
 
+        {/* Words grid — mouse events live HERE so coordinates match clip-path space */}
         <motion.div
-          className="relative"
+          className="relative cursor-crosshair"
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.3, ease: E }}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {/* Dim layer */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none">
             {WORDS.map((w) => (
               <span key={w} className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle/25 uppercase py-3.5 leading-none">
                 {w}
@@ -110,7 +106,7 @@ export function SpotlightSection() {
             ))}
           </div>
 
-          {/* Gold revealed layer — position tracks cursor with zero lag */}
+          {/* Gold revealed layer — clip-path space matches parent div coordinates */}
           <motion.div
             className="absolute inset-0 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-1 pointer-events-none"
             style={{ clipPath }}

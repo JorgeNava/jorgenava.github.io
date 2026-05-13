@@ -141,7 +141,7 @@ export function Contact() {
 
         {/* Form */}
         <motion.div
-          className="mt-24 pt-20 border-t border-border"
+          className="mt-24 pt-20 border-t border-white/10"
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.45, ease: E }}
@@ -154,8 +154,8 @@ export function Contact() {
             {/* Left col — nombre + email */}
             <div className="flex flex-col">
               {/* Nombre */}
-              <div className="flex flex-col gap-1 mb-10">
-                <label className="font-mono text-[9px] tracking-[0.3em] text-fg-muted uppercase">
+              <div className="flex flex-col gap-2 mb-10">
+                <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
                   Nombre
                 </label>
                 <input
@@ -165,13 +165,13 @@ export function Contact() {
                   onChange={handleChange}
                   required
                   placeholder="Tu nombre"
-                  className="bg-transparent border-b border-white/20 py-4 text-base text-fg placeholder:text-fg-muted/50 focus:outline-none focus:border-gold/50 transition-colors duration-300"
+                  className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
                 />
               </div>
 
               {/* Email */}
-              <div className="flex flex-col gap-1 mb-10">
-                <label className="font-mono text-[9px] tracking-[0.3em] text-fg-muted uppercase">
+              <div className="flex flex-col gap-2 mb-10">
+                <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
                   Email
                 </label>
                 <input
@@ -181,7 +181,7 @@ export function Contact() {
                   onChange={handleChange}
                   required
                   placeholder="tu@email.com"
-                  className="bg-transparent border-b border-white/20 py-4 text-base text-fg placeholder:text-fg-muted/50 focus:outline-none focus:border-gold/50 transition-colors duration-300"
+                  className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300"
                 />
               </div>
 
@@ -203,7 +203,7 @@ export function Contact() {
                       key="btn"
                       type="submit"
                       disabled={sending}
-                      className="group flex items-center gap-4 border border-white/20 px-8 py-4 font-mono text-[10px] tracking-[0.25em] text-fg-muted uppercase hover:border-gold/50 hover:text-fg transition-all duration-300 disabled:opacity-50"
+                      className="group flex items-center gap-4 border border-white/35 px-8 py-4 font-mono text-[10px] tracking-[0.25em] text-fg uppercase hover:border-gold/60 hover:text-gold transition-all duration-300 disabled:opacity-50"
                       initial={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
@@ -224,8 +224,8 @@ export function Contact() {
             </div>
 
             {/* Right col — mensaje */}
-            <div className="flex flex-col gap-1 lg:row-span-3">
-              <label className="font-mono text-[9px] tracking-[0.3em] text-fg-muted uppercase">
+            <div className="flex flex-col gap-2 lg:row-span-3">
+              <label className="font-mono text-[9px] tracking-[0.3em] text-fg uppercase">
                 Mensaje
               </label>
               <textarea
@@ -235,7 +235,7 @@ export function Contact() {
                 required
                 rows={8}
                 placeholder="Cuéntame sobre tu proyecto…"
-                className="bg-transparent border-b border-white/20 py-4 text-base text-fg placeholder:text-fg-muted/50 focus:outline-none focus:border-gold/50 transition-colors duration-300 resize-none flex-1"
+                className="bg-transparent border-b border-white/35 py-3.5 text-base text-fg placeholder:text-fg-muted focus:outline-none focus:border-gold/60 transition-colors duration-300 resize-none flex-1"
               />
             </div>
           </form>
