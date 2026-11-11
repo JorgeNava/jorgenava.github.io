@@ -144,7 +144,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2, ease: E }}
         >
-          Arquitecto de Software · CEO, One Spark
+          Arquitecto de Software · IA aplicada · CEO, One Spark
         </motion.p>
 
         {/* Name — Cormorant Garamond, light, caps */}

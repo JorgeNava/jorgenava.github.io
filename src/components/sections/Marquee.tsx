@@ -2,6 +2,7 @@
 
 const ITEMS = [
   "Arquitectura de Software",
+  "IA aplicada · Agentes · Evals",
   "Next.js & React",
   "eCommerce Shopify",
   "AWS Serverless",

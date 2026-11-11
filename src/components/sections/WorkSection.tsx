@@ -12,9 +12,53 @@ const PROJECTS = [
     desc: "Consultoría de emprendimiento digital. Acompañamos a empresas desde la estrategia hasta el producto terminado: web, eCommerce, SEO y automatización.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 20%, rgba(80,30,180,0.5) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 80%, rgba(40,15,100,0.4) 0%, transparent 60%)",
-    href: "https://one-spark.com.mx",
+    href: "https://one-spark.com.mx" as string | undefined,
     num: "01",
     featured: true,
+  },
+  {
+    name: "SAM — Social AI Manager",
+    type: "IA aplicada · Producto",
+    year: "2026",
+    desc: "Plataforma multi-marca donde un asistente planea y redacta contenido con tool use y confirmación en dos fases. Generación best-of-N con jueces LLM de texto e imagen; captions evaluados en 8.5/10 sobre perfiles reales de marca.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 20% 30%, rgba(196,153,95,0.35) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 70%, rgba(80,30,180,0.35) 0%, transparent 60%)",
+    href: undefined,
+    num: "02",
+    featured: false,
+  },
+  {
+    name: "Nava OS",
+    type: "IA aplicada · Asistente",
+    year: "2025 — 2026",
+    desc: "Asistente personal (móvil + serverless). Reemplacé un clasificador de intención y 7 handlers por un solo orquestador con tool use en AWS Lambda, con confirmación antes de escribir.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 80% 30%, rgba(120,80,200,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 70%, rgba(40,20,90,0.35) 0%, transparent 60%)",
+    href: undefined,
+    num: "03",
+    featured: false,
+  },
+  {
+    name: "Agentes contable y de finanzas",
+    type: "IA aplicada · Multi-agente",
+    year: "2026",
+    desc: "Dos agentes que cooperan con memoria y canal compartidos, en modo copiloto. Un subagente verificador revisa cada regla fiscal contra el texto literal de las fuentes oficiales y marca lo no verificado en vez de adivinar.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 30% 20%, rgba(30,110,90,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 70% 80%, rgba(10,60,50,0.35) 0%, transparent 60%)",
+    href: undefined,
+    num: "04",
+    featured: false,
+  },
+  {
+    name: "Docs RAG with Evals",
+    type: "IA aplicada · Open source · En progreso",
+    year: "Dic 2026",
+    desc: "RAG sobre documentación pública de AWS: búsqueda híbrida (BM25 + embeddings), reranking y respuestas con cita, medido con un set curado de 100 preguntas (recall@5 y fidelidad con juez LLM) en CI.",
+    gradient:
+      "radial-gradient(ellipse 80% 80% at 70% 70%, rgba(196,153,95,0.3) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 30% 30%, rgba(30,60,110,0.35) 0%, transparent 60%)",
+    href: "https://github.com/JorgeNava",
+    num: "05",
+    featured: false,
   },
   {
     name: "Maestros Joyeros",
@@ -24,7 +68,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(100,90,110,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(60,55,70,0.35) 0%, transparent 60%)",
     href: "https://maestrosjoyeros.com",
-    num: "02",
+    num: "06",
     featured: false,
   },
   {
@@ -35,18 +79,18 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 80%, rgba(10,60,70,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 20%, rgba(5,40,50,0.35) 0%, transparent 60%)",
     href: "https://chinacotequila.com",
-    num: "03",
+    num: "07",
     featured: false,
   },
   {
     name: "INA Autopartes",
     type: "Portal Digital",
     year: "2023",
-    desc: "Portal digital institucional para el Instituto Nacional de Autopartes de México.",
+    desc: "Portal digital institucional para la Industria Nacional de Autopartes de México.",
     gradient:
       "radial-gradient(ellipse 80% 80% at 50% 10%, rgba(30,60,110,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 50% 90%, rgba(20,40,80,0.35) 0%, transparent 60%)",
     href: "https://ina.com.mx",
-    num: "04",
+    num: "08",
     featured: false,
   },
   {
@@ -57,7 +101,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 50%, rgba(60,20,100,0.4) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 50%, rgba(40,10,70,0.35) 0%, transparent 60%)",
     href: "https://agenciamano.mx",
-    num: "05",
+    num: "09",
     featured: false,
   },
   {
@@ -68,7 +112,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 80% 20%, rgba(10,60,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 20% 80%, rgba(5,40,60,0.35) 0%, transparent 60%)",
     href: "https://a118.mx",
-    num: "06",
+    num: "10",
     featured: false,
   },
   {
@@ -79,7 +123,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 30% 70%, rgba(0,90,80,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 70% 30%, rgba(0,60,55,0.35) 0%, transparent 60%)",
     href: "https://iowabrace.com.mx",
-    num: "07",
+    num: "11",
     featured: false,
   },
   {
@@ -90,7 +134,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 70% 20%, rgba(120,40,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 30% 80%, rgba(90,25,10,0.35) 0%, transparent 60%)",
     href: "https://ponseti.com.mx",
-    num: "08",
+    num: "12",
     featured: false,
   },
   {
@@ -101,7 +145,7 @@ const PROJECTS = [
     gradient:
       "radial-gradient(ellipse 80% 80% at 20% 30%, rgba(60,90,20,0.45) 0%, transparent 65%), radial-gradient(ellipse 60% 60% at 80% 70%, rgba(40,65,10,0.35) 0%, transparent 60%)",
     href: "https://kurunjuatha.com",
-    num: "09",
+    num: "13",
     featured: false,
   },
 ];
@@ -159,7 +203,7 @@ function ProjectCard({
         <div className="flex items-start justify-between">
           <span className="font-mono text-[10px] tracking-[0.25em] text-gold/60 uppercase">{project.num}</span>
           <motion.span
-            className="font-mono text-[10px] tracking-[0.2em] text-gold uppercase"
+            className={`font-mono text-[10px] tracking-[0.2em] text-gold uppercase ${project.href ? "" : "hidden"}`}
             initial={{ opacity: 0, x: 8 }}
             animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: 8 }}
             transition={{ duration: 0.3 }}
@@ -206,7 +250,7 @@ function ProjectCard({
 
   const motionProps = {
     ref: cardRef,
-    className: "relative overflow-hidden rounded-2xl border border-border cursor-pointer",
+    className: `relative overflow-hidden rounded-2xl border border-border ${project.href ? "cursor-pointer" : ""}`,
     style: { background: "#0D0B12" } as React.CSSProperties,
     initial: { opacity: 0, y: 30 },
     animate: inView ? { opacity: 1, y: 0 } : {},
@@ -217,14 +261,14 @@ function ProjectCard({
 
   return (
     <motion.div {...motionProps}>
-      {/* Invisible anchor overlay for navigation */}
-      <a
+      {/* Invisible anchor overlay for navigation (private projects have no link) */}
+      {project.href && <a
         href={project.href}
         target="_blank"
         rel="noopener noreferrer"
         className="absolute inset-0 z-20"
         aria-label={`Ver proyecto ${project.name}`}
-      />
+      />}
       {inner}
     </motion.div>
   );
